@@ -324,7 +324,7 @@ server <- function(input, output) {
   })
   
   output$explanation3 <- renderText({
-    "This charts sums up what we saw in the first two charts. There's more rides in the afternoons and in september while there's less rides in the mornings and in April. Looking at these together can help us hypothesize the reasons for these occurances such as The beginning of the school year in Spetemeber correlating with the number of rides or that people take more uber rides in the afternoons(when the day is over) than when the morning or evening. "
+    "This chart sums up what we saw in the first two charts. There's more rides in the afternoons and in september while there's less rides in the mornings and in April. Looking at these together can help us hypothesize the reasons for these occurances such as The beginning of the school year in Spetemeber correlating with the number of rides or that people take more uber rides in the afternoons(when the day is over) than when the morning or evening. "
     
   })
   
@@ -339,7 +339,7 @@ server <- function(input, output) {
     "This chart shows us the trend by base and month. We see that base B02617 has teh most trips and base B02512 has the least."
   })
   output$Heat1exp <- renderText({
-    "in this heatmap we can see that its lighter for hours 7 to8 and even lighter for hours 16 to 18.Since the label shows lighter is more trips we can coclude taht those times have more trips in a day. Moreover, day 31 is the darkest so that has the least trips in a month."
+    "In this heat map we can see that its lighter for hours 7 to8 and even lighter for hours 16 to 18.Since the label shows lighter is more trips we can coclude taht those times have more trips in a day. Moreover, day 31 is the darkest so that has the least trips in a month."
   })
   output$Heat2exp <- renderText({
     "Darker colors in July,May and April show a decrease compare dto other months. This calendar view reveals how numbre of trips is affected during holidays like July 4,and Easter "
@@ -351,7 +351,7 @@ server <- function(input, output) {
     "There is a clear distinction B02598, B02617 and B02682 have the most rides while B02512 and B02764 have the least."
   })
   output$Heat5exp <- renderText({
-    "This hetamap shows that the end of the week and year have a higher number of rides"
+    "This heat map shows that the end of the week and year have a higher number of rides"
   })
   
   
