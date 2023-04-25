@@ -38,7 +38,7 @@ data_combined$hour = factor(hour(hms(data_combined$Time)))
 
 
 
-#Data Analysis
+# Data Analysis
 
 To create the charts, I grouped the table by each respective time format needed(hour, month, day of week) and used each one to create a chart.
 ```R
