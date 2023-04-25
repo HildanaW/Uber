@@ -5,7 +5,7 @@ For this project I analyzed the number of Uber rides and displayed trends in the
 
 
 # Combining and Cleaning  the Data
-R'''
+```R
 AprilData<- read.csv("uber-raw-data-apr14.csv")
 AugustData<-read.csv("uber-raw-data-aug14.csv")
 JulyData<- read.csv("uber-raw-data-jul14.csv")
@@ -30,7 +30,7 @@ data_combined$second = factor(second(hms(data_combined$Time)))
 data_combined$minute = factor(minute(hms(data_combined$Time)))
 data_combined$hour = factor(hour(hms(data_combined$Time)))
 
-'''
+```
 
 
 
