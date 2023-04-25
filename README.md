@@ -33,6 +33,10 @@ data_combined$hour = factor(hour(hms(data_combined$Time)))
 ```
 
 #Data Summary
+![Image 4-25-23 at 3 27 PM](https://user-images.githubusercontent.com/108307724/234396252-4493a9da-528e-41a9-9de2-358fe15fe2d8.jpeg)
+
+
+
 
 #Data Analysis
 
