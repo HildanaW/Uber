@@ -367,6 +367,170 @@ server <- function(input, output) {
 shinyApp(ui, server) 
 ```
 
+# Geospatial Leaflet
+```R
+  # Leaflet map and info box
+  mainPanel(
+    leafletOutput("map"),
+    verbatimTextOutput("info")
+  )
+)
+
+# Define server
+server <- function(input, output, session) {
+  
+  # Initialize leaflet map with default view
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      setView(lng = -74.0060, lat = 40.7128, zoom = 13)
+  })
+  
+  # Add markers with pop-up info based on data frame
+  data <- data.frame(
+    name = c("Statue of Liberty", "Empire State Building"),
+    lat = c(40.6892, 40.7484),
+    lng = c(-74.0445, -73.9857),
+    info = c("The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor within New York City.", "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City.")
+  )
+  
+  # Create reactive values for markers and search results
+  markers <- reactiveValues(data = data)
+  searchResults <- reactiveValues(data = NULL)
+  
+  # Add markers to map
+  observe({
+    leafletProxy("map", data = markers$data) %>%
+      clearMarkers() %>%
+      addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
+  })
+  
+  # Update markers based on search results
+  observe({
+    if (!is.null(searchResults$data)) {
+      leafletProxy("map", data = searchResults$data) %>%
+        clearMarkers() %>%
+        addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
+    }
+  })
+  
+  # Search button action
+  #Leaflet Shiny Geospatial
+  library(shiny)
+  library(leaflet)
+  library(shinyjs)
+  
+  # Define UI
+  ui <- fluidPage(
+    
+    # Use shinyjs to reset map
+    useShinyjs(),
+    extendShinyjs(text = "shinyjs.resetMap = function() { map.setView([40.7128, -74.0060], 13); }", functions = list(
+      resetMap = JS("function() { map.setView([40.7128, -74.0060], 13); }")
+    )),
+    
+    
+    # Search input and search button
+    sidebarPanel(
+      textInput("search", "Search Address:"),
+      actionButton("go", "Go")
+    ),
+    
+    # Reset map button and measure button
+    tags$div(
+      id = "buttons",
+      actionButton("reset", "Reset Map"),
+      actionButton("measure", "Measure Distance")
+    ),
+    
+    # Leaflet map and info box
+    mainPanel(
+      leafletOutput("map"),
+      verbatimTextOutput("info")
+    )
+  )
+  
+  # Define server
+  server <- function(input, output, session) {
+    
+    # Initialize leaflet map with default view
+    output$map <- renderLeaflet({
+      leaflet() %>%
+        addTiles() %>%
+        setView(lng = -74.0060, lat = 40.7128, zoom = 13)
+    })
+    
+    # Add markers with pop-up info based on data frame
+    data <- data.frame(
+      name = c("Statue of Liberty", "Empire State Building"),
+      lat = c(40.6892, 40.7484),
+      lng = c(-74.0445, -73.9857),
+      info = c("The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor within New York City.", "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City.")
+    )
+    
+    # Create reactive values for markers and search results
+    markers <- reactiveValues(data = data)
+    searchResults <- reactiveValues(data = NULL)
+    
+    # Add markers to map
+    observe({
+      leafletProxy("map", data = markers$data) %>%
+        clearMarkers() %>%
+        addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
+    })
+    
+    # Update markers based on search results
+    observe({
+      if (!is.null(searchResults$data)) {
+        leafletProxy("map", data = searchResults$data) %>%
+          clearMarkers() %>%
+          addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
+      }
+    })
+    
+    # Search button action
+    observeEvent(input$go, {
+      if (input$search != "") {
+        searchResults$data <- markers$data[grep(input$search, markers$data$name), ]
+        if (nrow(searchResults$data) == 0) {
+          showNotification("No results found.", type = "warning", duration = 3)
+        } else {
+          leafletProxy("map") %>%
+            fitBounds(lng1 = min(searchResults$data$lng), lat1 = min(searchResults$data$lat),
+                      lng2 = max(searchResults$data$lng), lat2 = max(searchResults$data$lat))
+        }
+      }
+    })
+    
+    # Reset map button action
+    observeEvent(input$reset, {
+      js$resetMap()
+      searchResults$data <- NULL
+    })
+    
+    # Measure button action
+    observeEvent(input$measure, {
+      leafletProxy("map") %>%
+        measure(type = "polyline", primaryLengthUnit = "meters")
+    })
+  }
+  shinyApp(ui = ui, server = server)
+  
+  
+  # Reset map button action
+  observeEvent(input$reset, {
+    js$resetMap()
+    searchResults$data <- NULL
+  })
+  
+  # Measure button action
+  observeEvent(input$measure, {
+    leafletProxy("map") %>%
+      measure(type = "polyline", primaryLengthUnit = "meters")
+  })
+}
+shinyApp(ui = ui, server = server)
+```
 # Conclusion
 
 
