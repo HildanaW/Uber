@@ -534,6 +534,8 @@ server <- function(input, output, session) {
 }
 shinyApp(ui = ui, server = server)
 ```
+<img width="1280" alt="Screenshot 2023-04-27 at 6 40 38 PM" src="https://user-images.githubusercontent.com/108307724/235013149-cc5583ac-77e5-4d93-85f8-0c346cf8186f.png">
+
 # Conclusion
 1. There is a significant increase in teh number of uber rides from earlier in the day to 4pm/ 5pm which could be expalined by the end of the the work day. </br>
 2.The number of rides has an increasing trend as we go later in the year. Some reasons for this could be the weather or which period of the school year it is.</br>
