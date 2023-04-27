@@ -419,7 +419,10 @@ server <- function(input, output, session) {
   library(shiny)
   library(leaflet)
   library(shinyjs)
-  
+   This is what the shiny leaflet looks like:
+   <img width="1280" alt="Screenshot 2023-04-27 at 6 40 38 PM" src="https://user-images.githubusercontent.com/108307724/235013068-96b3e7ab-ce2a-4de5-968b-2304758bbdd5.png">
+
+   This is how I did it:
   # Define UI
   ui <- fluidPage(
     
