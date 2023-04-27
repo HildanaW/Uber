@@ -366,6 +366,9 @@ server <- function(input, output) {
 # Run the app
 shinyApp(ui, server) 
 ```
+<img width="1280" alt="Screenshot 2023-04-27 at 6 44 06 PM" src="https://user-images.githubusercontent.com/108307724/235013385-71b5531f-5fd4-4f0c-b81d-c3b00e299933.png">
+<img width="1280" alt="Screenshot 2023-04-27 at 6 44 23 PM" src="https://user-images.githubusercontent.com/108307724/235013408-1b582486-b406-481a-ace1-c7ea5cb2bfdc.png">
+
 
 # Geospatial Leaflet
 ```R
