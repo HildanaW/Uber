@@ -386,10 +386,6 @@ shinyApp(ui, server)
 
 
 # Conclusion
-1. There is a significant increase in the number of uber rides from earlier in the day to 4pm/ 5pm which could be expalined by the end of the the work day. </br>
-2. The number of rides has an increasing trend as we go later in the year. Some reasons for this could be the weather or which period of the school year it is. </br>
-3. There is also a pattern looking at the rides in a week. Fridays and Saturdays have a higher number possibly due to people going out, meeting up or getting groceries after the work week is over. As for Tuesday, one hypotheis could be that people with hybrid schedules are more likeley to take Monday or Fridays off as oppose dto the middle of the week as it adds to their weekend. </br>
-
 
 1. A statistically significant increase is observed in the number of Uber rides from earlier in the day until 4pm/5pm, which could potentially be attributed to the end of the workday.</br>
 
