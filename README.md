@@ -72,13 +72,16 @@ Here is a representative example of one of the original data sets, corresponding
 
 # Data Analysis 📊
 
-To create the charts, I grouped the table by each respective time format needed(hour, month, day of week) and used each one to create a chart.
+In order to analyze trends from the dataset, I created  pivot tables, charts and heat maps for the required time frames, namely by hour, by month, and by week. Each pivot table was then written to a CSV file for further analysis and visualization.
+
 ```R
 #Chart 1:By the Hour 
 
 data_by_hour <- data_combined %>% 
   group_by(hour) %>% 
   dplyr::summarize(Total = n())
+
+write.csv(data_by_hour, "data_by_hour.csv", row.names = FALSE)
 
 ggplot(data_by_hour, aes(hour, Total)) + 
   geom_bar(stat="identity", 
@@ -94,7 +97,7 @@ ggplot(data_by_hour, aes(hour, Total)) +
 data_by_month <- data_combined %>% 
   group_by(month) %>% 
   dplyr::summarize(Total = n())
-
+write.csv(data_by_month, "data_by_month.csv", row.names = FALSE)
 ggplot(data_by_month, aes(month, Total, fill=month)) + 
   geom_bar(stat = "identity") + 
   ggtitle("Trips by  Month") + 
@@ -104,7 +107,7 @@ ggplot(data_by_month, aes(month, Total, fill=month)) +
 month_hour_data <- data_combined %>% 
   group_by(month, hour) %>%  
   dplyr::summarize(Total = n())
-
+write.csv(month_hour_data, "month_hour_data.csv", row.names = FALSE)
 ggplot(month_hour_data, aes(hour, Total, fill=month)) + 
   geom_bar(stat = "identity") + 
   ggtitle("Trips by Hour and Month") + 
@@ -113,6 +116,7 @@ ggplot(month_hour_data, aes(hour, Total, fill=month)) +
 
 #Chart4:Trips everyday of the Month(Max 31 days)
 data_by_day <- data_combined %>% group_by(day) %>% dplyr::summarize(Trips = n())
+write.csv(data_by_day, "data_by_day.csv", row.names = FALSE)
 ggplot(data_by_day, aes(day, Trips)) + 
   geom_bar(stat = "identity", fill = "purple") +
   ggtitle("Trips by day of the month") + 
@@ -121,10 +125,8 @@ ggplot(data_by_day, aes(day, Trips)) +
 
 #Chart5:Day of week and Month
 
-day_month_data <- data_combined %>% 
-  group_by(dayofweek, month) %>% 
-  dplyr::summarize(Trips = n())
-
+day_month_data <- data_combined %>% group_by(dayofweek, month) %>% dplyr::summarize(Trips = n())
+write.csv(day_month_data, "day_month_data.csv", row.names = FALSE)
 
 ggplot(day_month_data, aes(dayofweek, Trips, fill = month)) + 
   geom_bar(stat = "identity", aes(fill = month), position = "dodge") + 
@@ -134,16 +136,15 @@ ggplot(day_month_data, aes(dayofweek, Trips, fill = month)) +
 
 # Chart 6 :Trips by Bases and Month 
 Base_month_data <- data_combined %>% group_by(month,Base) %>% dplyr::summarize(Total = n())
-
+write.csv(Base_month_data, "Base_month_data.csv", row.names = FALSE)
 ggplot(Base_month_data, aes(Base, Total, fill=month)) + 
   geom_bar(stat = "Identity",aes(fill = month), position = "dodge" ) + 
   ggtitle("Trips by Base and Month") + 
   scale_y_continuous(labels = comma) + 
   scale_fill_manual(values = colors)
 
-
 ```
-Similarly, I  grouped the table by each respective time format needed(hour, month, day of week) to create heat maps as follows:
+Similarly, I  created more pivot tables by each respective time frame needed(hour, month, day of week) to create heat maps as follows:
 
 ```R
 # Heatmap1:by hr and day
@@ -180,9 +181,23 @@ ggplot(day_month_data, aes(month, dayofweek, fill = Trips)) +
 
 ```
 # Creating the Shiny App 🌐
-```R
 
-# Shiny for charts & Heatmaps
+I created a separate web app Rscript to create and deplot the shiny app
+```R
+colors = c("#CC1012", "#05a399", "#cfcaca", "#665535","#f5e840", "#0683c9", "#e075b0")
+
+#Read the csv files for the charts
+
+data_by_hour<- read.csv("data_by_hour.csv")
+data_by_month<-read.csv("data_by_month.csv")
+month_hour_data<-read.csv("month_hour_data.csv")
+data_by_day<-read.csv("data_by_day.csv")
+Base_month_data<-read.csv("Base_month_data.csv")
+day_hour_data<-read.csv("day_hour_data.csv")
+month_day_data<-read.csv("month_day_data.csv")
+Base_week_data<-read.csv("Base_week_data.csv")
+data_by_day<-read.csv("data_by_day.csv")
+day_month_data<-read.csv("day_month_data.csv")
 
 ui <- fluidPage(
   
@@ -213,8 +228,8 @@ ui <- fluidPage(
   plotOutput("chart5"),
   
   textOutput("explanation5"),
- 
-   # Display chart 6
+  
+  # Display chart 6
   plotOutput("chart6"),
   
   textOutput("explanation6"),
@@ -241,12 +256,21 @@ ui <- fluidPage(
   
   textOutput("Heat5exp"),
   
+
+  titlePanel("Geospatial Leaflet: Rides in New York"),
+# Leaflet map and info box
+mainPanel(
+  leafletOutput("map"),
+  verbatimTextOutput("info")
 )
+)
+
 
 # Define the server
 server <- function(input, output) {
   
   #Render the chart 1
+  
   output$chart1 <- renderPlot({
     ggplot(data_by_hour, aes(hour, Total)) + 
       geom_bar(stat="identity", 
@@ -270,7 +294,7 @@ server <- function(input, output) {
   
   # Render chart 3
   output$chart3 <- renderPlot({
-
+    
     ggplot(month_hour_data, aes(hour, Total, fill=month)) + 
       geom_bar(stat = "identity") + 
       ggtitle("Trips by Hour and Month") + 
@@ -291,7 +315,7 @@ server <- function(input, output) {
   output$chart5 <- renderPlot({
     ggplot(day_month_data, aes(dayofweek, Trips, fill = month)) + 
       geom_bar(stat = "identity", aes(fill = month), position = "dodge") + 
-      ggtitle("Trips by Day of Week and Month") +
+      ggtitle("Trips by Day of Week and Month") + 
       theme(plot.title = element_text(hjust = 0.5)) + 
       scale_y_continuous(labels = comma) + 
       scale_fill_manual(values = colors)
@@ -300,7 +324,7 @@ server <- function(input, output) {
   # Render chart 6
   output$chart6 <- renderPlot({
     ggplot(Base_month_data, aes(Base, Total, fill=month)) + 
-      geom_bar(stat = "Identity",aes(fill = month), position = "dodge" ) + 
+      geom_bar(stat = "identity", aes(fill = month), position = "dodge") + 
       ggtitle("Trips by Base and Month") +
       theme(plot.title = element_text(hjust = 0.5)) + 
       scale_y_continuous(labels = comma) + 
@@ -365,13 +389,13 @@ server <- function(input, output) {
   })
   
   output$explanation5 <- renderText({
-    "This chart show sus the trend of number of rides within a week along with the months which they were in. The highest number of rides were on Tuesdays, Fridays and Saturdays while the lowest were on Sundays. This is probably due to people staying home on Sundays as it is the weekend and People going out on Fridays and Saturdays. I can't hypothesize why there's such a high number on Tuesdays but this chart brings that question forth. "
+    "This chart shows us the trend of number of rides within a week along with the months which they were in. The highest number of rides were on Tuesdays, Fridays and Saturdays while the lowest were on Sundays. This is probably due to people staying home on Sundays as it is the weekend and People going out on Fridays and Saturdays. I can't hypothesize why there's such a high number on Tuesdays but this chart brings that question forth. "
   })
   output$explanation6 <- renderText({
     "This chart shows us the trend by base and month. We see that base B02617 has teh most trips and base B02512 has the least."
   })
   output$Heat1exp <- renderText({
-    "In this heat map we can see that its lighter for hours 7 to8 and even lighter for hours 16 to 18.Since the label shows lighter is more trips we can coclude taht those times have more trips in a day. Moreover, day 31 is the darkest so that has the least trips in a month."
+    "In this heatmap we can see that its lighter for hours 7 to8 and even lighter for hours 16 to 18.Since the label shows lighter is more trips we can coclude taht those times have more trips in a day. Moreover, day 31 is the darkest so that has the least trips in a month."
   })
   output$Heat2exp <- renderText({
     "Darker colors in July,May and April show a decrease compare dto other months. This calendar view reveals how numbre of trips is affected during holidays like July 4,and Easter "
@@ -383,23 +407,78 @@ server <- function(input, output) {
     "There is a clear distinction B02598, B02617 and B02682 have the most rides while B02512 and B02764 have the least."
   })
   output$Heat5exp <- renderText({
-    "This heat map shows that the end of the week and year have a higher number of rides"
+    "This heatmap shows that the end of the week and year have a higher number of rides"
   })
   
   
   
+  # Initialize leaflet map with default view
+  output$map <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      setView(lng = -74.0060, lat = 40.7128, zoom = 13)
+  })
   
+  # Add markers with pop-up info based on data frame
+  data <- data.frame(
+    name = c("Statue of Liberty", "Empire State Building"),
+    lat = c(40.6892, 40.7484),
+    lng = c(-74.0445, -73.9857),
+    info = c("The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor within New York City.", "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City.")
+  )
   
+  # Create reactive values for markers and search results
+  markers <- reactiveValues(data = data)
+  searchResults <- reactiveValues(data = NULL)
   
+  # Add markers to map
+  observe({
+    leafletProxy("map", data = markers$data) %>%
+      clearMarkers() %>%
+      addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
+  })
   
+  # Update markers based on search results
+  observe({
+    if (!is.null(searchResults$data)) {
+      leafletProxy("map", data = searchResults$data) %>%
+        clearMarkers() %>%
+        addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
+    }
+  })
   
-}    
-
+  # Search button action
+  observeEvent(input$go, {
+    if (input$search != "") {
+      searchResults$data <- markers$data[grep(input$search, markers$data$name), ]
+      if (nrow(searchResults$data) == 0) {
+        showNotification("No results found.", type = "warning", duration = 3)
+      } else {
+        leafletProxy("map") %>%
+          fitBounds(lng1 = min(searchResults$data$lng), lat1 = min(searchResults$data$lat),
+                    lng2 = max(searchResults$data$lng), lat2 = max(searchResults$data$lat))
+      }
+    }
+  })
+  
+  # Reset map button action
+  observeEvent(input$reset, {
+    js$resetMap()
+    searchResults$data <- NULL
+  })
+  
+  # Measure button action
+  observeEvent(input$measure, {
+    leafletProxy("map") %>%
+      measure(type = "polyline", primaryLengthUnit = "meters")
+  })
+  
+    
+}
 # Run the app
 shinyApp(ui, server) 
-```
-<img width="1280" alt="Screenshot 2023-04-27 at 6 44 06 PM" src="https://user-images.githubusercontent.com/108307724/235013385-71b5531f-5fd4-4f0c-b81d-c3b00e299933.png">
-<img width="1280" alt="Screenshot 2023-04-27 at 6 44 23 PM" src="https://user-images.githubusercontent.com/108307724/235013408-1b582486-b406-481a-ace1-c7ea5cb2bfdc.png">
+
+ 
 
 
 
