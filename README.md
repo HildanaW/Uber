@@ -4,13 +4,13 @@
 
 ![image](https://user-images.githubusercontent.com/108307724/234381846-1cdded4d-6b19-4185-bbd7-59489a5d0998.png)
 # Introduction 
-For this project I analyzed the number of Uber rides and displayed trends in the day, week, month and year.
 
-Welcome to my GitHub repository showcasing an analysis of Uber ride data from September to April. This project aimed to explore patterns and trends in Uber rides using various data analysis tools and techniques. Specifically, I utilized pivot tables, charts, heatmaps, and a web application to display my findings.
+Welcome to my GitHub repository showcasing an analysis of Uber ride data from September to April. This project aimed to explore patterns and trends in Uber rides using various data analysis tools and techniques.I utilized pivot tables, charts, heatmaps, and a web application to display my findings.
 
-Through this project, I sought to gain insights into the demand for Uber rides in different locations and at different times of the day, as well as to identify any factors that may affect ride demand. To accomplish this, I first cleaned and organized the data, ensuring its accuracy and completeness. I then used pivot tables to summarize the data and identify trends in ride frequency and duration.
+Through this project, my goal was  to gain insights on the demand for Uber rides in different timeframes, as well as to identify any factors that may affect ride demand. To accomplish this, I first cleaned and organized the data, ensuring its accuracy and completeness. I then used pivot tables to summarize the data and identify trends in ride frequency.
 
-To visually represent my findings, I created charts and heatmaps that effectively conveyed the distribution of Uber rides across different areas and times. Finally, I developed a web application that allowed users to interact with the data and explore the insights I uncovered.
+To visually represent my findings, I created charts and heatmaps that conveyed the distribution of Uber rides across different areas and times. Finally, I developed a web application that allowed users to interact with the data and explore the insights I uncovered.
+
 # Data Cleaning 🧹
 ```R
 AprilData<- read.csv("uber-raw-data-apr14.csv")
