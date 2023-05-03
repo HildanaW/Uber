@@ -3,7 +3,7 @@
 
 ![image](https://user-images.githubusercontent.com/108307724/236007922-846f937f-2497-4704-891f-66d503557c5d.png)
 
-![image](https://user-images.githubusercontent.com/108307724/234381846-1cdded4d-6b19-4185-bbd7-59489a5d0998.png)
+
 # Introduction 
 
 Welcome to my GitHub repository showcasing an analysis of Uber ride data from September to April. This project aimed to explore patterns and trends in Uber rides using various data analysis tools and techniques.I utilized pivot tables, charts, heatmaps, and a web application to display my findings.
