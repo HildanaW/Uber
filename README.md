@@ -61,10 +61,14 @@ data_combined$hour = factor(hour(hms(data_combined$Time)))
 ```
 
 # Data Summary 📁
-![Image 4-25-23 at 3 27 PM](https://user-images.githubusercontent.com/108307724/234396252-4493a9da-528e-41a9-9de2-358fe15fe2d8.jpeg)
-
-
-
+Here is a representative example of one of the original data sets, corresponding to the month of April. I started this analysis with 6 total similar datasets for six months out of the year.
+| Date.Time          | Lat      | Lon      | Base   |
+|--------------------|----------|----------|--------|
+| 4/1/2014 0:11:00   | 40.7690  | -73.9549 | B02512 |
+| 4/1/2014 0:17:00   | 40.7267  | -74.0345 | B02512 |
+| 4/1/2014 0:21:00   | 40.7316  | -73.9873 | B02512 |
+| 4/1/2014 0:28:00   | 40.7588  | -73.9776 | B02512 |
+| 4/1/2014 0:33:00   | 40.7594  | -73.9722 | B02512 |
 
 # Data Analysis 📊
 
