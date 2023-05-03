@@ -4,7 +4,7 @@ For this project I analyzed the number of Uber rides and displayed trends in the
 ![image](https://user-images.githubusercontent.com/108307724/234381846-1cdded4d-6b19-4185-bbd7-59489a5d0998.png)
 
 
-#Cleaning  the Data
+# Data Cleaning 🧹
 ```R
 AprilData<- read.csv("uber-raw-data-apr14.csv")
 AugustData<-read.csv("uber-raw-data-aug14.csv")
@@ -32,13 +32,13 @@ data_combined$hour = factor(hour(hms(data_combined$Time)))
 
 ```
 
-# Data Summary
+# Data Summary 📁
 ![Image 4-25-23 at 3 27 PM](https://user-images.githubusercontent.com/108307724/234396252-4493a9da-528e-41a9-9de2-358fe15fe2d8.jpeg)
 
 
 
 
-# Data Analysis
+# Data Analysis 📊
 
 To create the charts, I grouped the table by each respective time format needed(hour, month, day of week) and used each one to create a chart.
 ```R
@@ -147,7 +147,7 @@ ggplot(day_month_data, aes(month, dayofweek, fill = Trips)) +
   ggtitle("Heat Map by Month and Week Day")
 
 ```
-# Creating the Shiny App
+# Creating the Shiny App 🌐
 ```R
 
 # Shiny for charts & Heatmaps
@@ -370,174 +370,6 @@ shinyApp(ui, server)
 <img width="1280" alt="Screenshot 2023-04-27 at 6 44 23 PM" src="https://user-images.githubusercontent.com/108307724/235013408-1b582486-b406-481a-ace1-c7ea5cb2bfdc.png">
 
 
-# Geospatial Leaflet
-```R
-  # Leaflet map and info box
-  mainPanel(
-    leafletOutput("map"),
-    verbatimTextOutput("info")
-  )
-)
-
-# Define server
-server <- function(input, output, session) {
-  
-  # Initialize leaflet map with default view
-  output$map <- renderLeaflet({
-    leaflet() %>%
-      addTiles() %>%
-      setView(lng = -74.0060, lat = 40.7128, zoom = 13)
-  })
-  
-  # Add markers with pop-up info based on data frame
-  data <- data.frame(
-    name = c("Statue of Liberty", "Empire State Building"),
-    lat = c(40.6892, 40.7484),
-    lng = c(-74.0445, -73.9857),
-    info = c("The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor within New York City.", "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City.")
-  )
-  
-  # Create reactive values for markers and search results
-  markers <- reactiveValues(data = data)
-  searchResults <- reactiveValues(data = NULL)
-  
-  # Add markers to map
-  observe({
-    leafletProxy("map", data = markers$data) %>%
-      clearMarkers() %>%
-      addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
-  })
-  
-  # Update markers based on search results
-  observe({
-    if (!is.null(searchResults$data)) {
-      leafletProxy("map", data = searchResults$data) %>%
-        clearMarkers() %>%
-        addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
-    }
-  })
-  
-  # Search button action
-  #Leaflet Shiny Geospatial
-  library(shiny)
-  library(leaflet)
-  library(shinyjs)
-   This is what the shiny leaflet looks like:
-   <img width="1280" alt="Screenshot 2023-04-27 at 6 40 38 PM" src="https://user-images.githubusercontent.com/108307724/235013068-96b3e7ab-ce2a-4de5-968b-2304758bbdd5.png">
-
-   This is how I did it:
-  # Define UI
-  ui <- fluidPage(
-    
-    # Use shinyjs to reset map
-    useShinyjs(),
-    extendShinyjs(text = "shinyjs.resetMap = function() { map.setView([40.7128, -74.0060], 13); }", functions = list(
-      resetMap = JS("function() { map.setView([40.7128, -74.0060], 13); }")
-    )),
-    
-    
-    # Search input and search button
-    sidebarPanel(
-      textInput("search", "Search Address:"),
-      actionButton("go", "Go")
-    ),
-    
-    # Reset map button and measure button
-    tags$div(
-      id = "buttons",
-      actionButton("reset", "Reset Map"),
-      actionButton("measure", "Measure Distance")
-    ),
-    
-    # Leaflet map and info box
-    mainPanel(
-      leafletOutput("map"),
-      verbatimTextOutput("info")
-    )
-  )
-  
-  # Define server
-  server <- function(input, output, session) {
-    
-    # Initialize leaflet map with default view
-    output$map <- renderLeaflet({
-      leaflet() %>%
-        addTiles() %>%
-        setView(lng = -74.0060, lat = 40.7128, zoom = 13)
-    })
-    
-    # Add markers with pop-up info based on data frame
-    data <- data.frame(
-      name = c("Statue of Liberty", "Empire State Building"),
-      lat = c(40.6892, 40.7484),
-      lng = c(-74.0445, -73.9857),
-      info = c("The Statue of Liberty is a colossal neoclassical sculpture on Liberty Island in New York Harbor within New York City.", "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City.")
-    )
-    
-    # Create reactive values for markers and search results
-    markers <- reactiveValues(data = data)
-    searchResults <- reactiveValues(data = NULL)
-    
-    # Add markers to map
-    observe({
-      leafletProxy("map", data = markers$data) %>%
-        clearMarkers() %>%
-        addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
-    })
-    
-    # Update markers based on search results
-    observe({
-      if (!is.null(searchResults$data)) {
-        leafletProxy("map", data = searchResults$data) %>%
-          clearMarkers() %>%
-          addMarkers(lng = ~lng, lat = ~lat, popup = ~name)
-      }
-    })
-    
-    # Search button action
-    observeEvent(input$go, {
-      if (input$search != "") {
-        searchResults$data <- markers$data[grep(input$search, markers$data$name), ]
-        if (nrow(searchResults$data) == 0) {
-          showNotification("No results found.", type = "warning", duration = 3)
-        } else {
-          leafletProxy("map") %>%
-            fitBounds(lng1 = min(searchResults$data$lng), lat1 = min(searchResults$data$lat),
-                      lng2 = max(searchResults$data$lng), lat2 = max(searchResults$data$lat))
-        }
-      }
-    })
-    
-    # Reset map button action
-    observeEvent(input$reset, {
-      js$resetMap()
-      searchResults$data <- NULL
-    })
-    
-    # Measure button action
-    observeEvent(input$measure, {
-      leafletProxy("map") %>%
-        measure(type = "polyline", primaryLengthUnit = "meters")
-    })
-  }
-  shinyApp(ui = ui, server = server)
-  
-  
-  # Reset map button action
-  observeEvent(input$reset, {
-    js$resetMap()
-    searchResults$data <- NULL
-  })
-  
-  # Measure button action
-  observeEvent(input$measure, {
-    leafletProxy("map") %>%
-      measure(type = "polyline", primaryLengthUnit = "meters")
-  })
-}
-shinyApp(ui = ui, server = server)
-```
-<img width="1280" alt="Screenshot 2023-04-27 at 6 40 38 PM" src="https://user-images.githubusercontent.com/108307724/235013149-cc5583ac-77e5-4d93-85f8-0c346cf8186f.png">
 
 # Conclusion
 1. There is a significant increase in teh number of uber rides from earlier in the day to 4pm/ 5pm which could be expalined by the end of the the work day. </br>
