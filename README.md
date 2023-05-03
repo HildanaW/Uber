@@ -1,8 +1,10 @@
-# Uber Analysis
+# Uber Analysis 🚘
 
-For this project I analyzed the number of Uber rides and displayed trends in the day, week, month and year.
+
+
 ![image](https://user-images.githubusercontent.com/108307724/234381846-1cdded4d-6b19-4185-bbd7-59489a5d0998.png)
-
+# Introduction 
+For this project I analyzed the number of Uber rides and displayed trends in the day, week, month and year.
 
 # Data Cleaning 🧹
 ```R
