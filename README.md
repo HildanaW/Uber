@@ -12,6 +12,12 @@ Through this project, my goal was  to gain insights on the demand for Uber rides
 
 To visually represent my findings, I created charts and heatmaps that conveyed the distribution of Uber rides across different areas and times. Finally, I developed a web application that allowed users to interact with the data and explore the insights I uncovered.
 
+# Data Dictionary 📕
+
+
+
+
+
 # Data Cleaning 🧹
 ```R
 AprilData<- read.csv("uber-raw-data-apr14.csv")
