@@ -482,7 +482,7 @@ shinyApp(ui, server)
 
 
 
-# Conclusion
+# Conclusion 🏁
 
 1. A statistically significant increase is observed in the number of Uber rides from earlier in the day until 4pm/5pm, which could potentially be attributed to the end of the workday.</br>
 
