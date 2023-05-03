@@ -14,8 +14,22 @@ To visually represent my findings, I created charts and heatmaps that conveyed t
 
 # Data Dictionary 📕
 
-
-
+1.</br>
+Variable Name: Date.Time </br>
+Description: The date and time when an Uber ride started.</br>
+Data Type: Datetime</br>
+2. </br>
+Variable Name: Lat</br>
+Description: The latitude of the location where an Uber ride started.</br>
+Data Type: Numeric</br>
+3.</br>
+Variable Name: Lon</br>
+Description: The longitude of the location where an Uber ride started.</br>
+Data Type: Numeric</br>
+4.</br>
+Variable Name: Base</br>
+Description: The Uber base code corresponding to the company that provided the ride.</br>
+Data Type: Categorical (text or factor)</br>
 
 
 # Data Cleaning 🧹
